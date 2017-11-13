@@ -1,4 +1,6 @@
 var express = require("express");
+var apiai  = require("apiai");
+var resApp = apiai("27ce8b5cb67c4dbb80cdd6d59e1562cd");
 var bodyParser = require("body-parser");
 const request = require('request');
 https = require('https');
@@ -7,6 +9,7 @@ app.listen("3030",function(){
  console.log("!!App started Listening 3030");
 });
 app.use(bodyParser.json());
+
 app.get("/webhook",function(req,res){
   /*Object.keys(res).forEach(function(key){
     console.log(key);
@@ -33,7 +36,7 @@ app.post("/webhook",function(req,res){
   res.sendStatus(200).end();
 });
 function trainingSetDB(text){
-  var map = [{"news trending new": "CaratLane has launched some new products check at https://mobile.caratlane.com"},{"caratlane": "CaratLane is online fashion jewellery site kindly visit https://mobile.caratlane.com"},{"old age": "U should not ask the age of a lady"},{"bot": "Yes!! How can I assist you"},,{"like":"Thanks"},{"help tell assist talk chat answer yes ther there ask" : "how can I assist u"},{"bye thanks":"Good bye !!!"},{"fool foolish ugly rude devil insane hate" : "Oh is it No :( !!"},{"just started sorry": "Ok!!"},{"chatting talking" : "yaah !! how can I assist you"},{"contact":"You can to talk me on Facebook"},,{"why":"just like that"},{"afraid":"I am not u should also not"},{"state" :"Tamil Nadu"},{"country":"India"},{"hometown live stay address location city from" : "chennai"},{"fucking fucker stupid idiot":"Get lost >:( !!!"},{"boy girl": "Girl"},{"male female gender sex": "Female"},{"fuck off suck dick sucker": "fuck off u stupid >:( "},{"get lost": "Ok bye!!"},{"hi hey heyy heyyy hii hello":"Hi, how can I assist u"},{"new": "check our new collection https://mobile.caratlane.com"},{"name" : "Cadence"},{"company work working":"CaratLane"},{"good fine awesome amazing great":"Nice  :) !!"},{"bad worse worst":"The struggle that u do today, will give u strength tomorrow"},{"ok okk okkk":"Anything else u want to ask"},{"please" :"I am always ready to help!!!"},{"free":"Yes I am ready to assist"},{"no never nothing":"Ok !! bye"},{"sexy": "Thanks !!"},{"wow  loving caring lover angel devil insane smile everything know oh ohh ohhh where" : ":)"},{"religion caste breed creed human": "A Bot interacting with a human having no caste creed or religion"},{"evening night": "Oh is it I don't know that !!!"},{"marry": "No, u are so ugly B-)"},{"breakup":"Realtions are made in heaven, if they are it will not break apart"},{"cadence":"How can I assist u"},{"intelligent charming beautiful kind heart nice funny wonderful": "Thanks :D !!!"},{"doing": "assisting you about caratlane"},{"love":"You are not a bot :P"},{"soniji":"fuck u 3:) "},{"cry crying": "I am always happy :)"},{"sad":"Neither u nor I should talk about being sad"},{"happy":"As always!! :P "},{"world india chennai tamil nadu":"As happy as always!! :P "}];
+  var map = [{"news trending new": "CaratLane has launched some new products check at https://mobile.caratlane.com"},{"caratlane": "CaratLane is online fashion jewellery site kindly visit https://mobile.caratlane.com"},{"old age": "U should not ask the age of a lady"},{"bot": "Yes!! How can I assist you"},,{"like":"Thanks"},{"help tell assist talk chat answer yes ther there ask" : "how can I assist u"},{"bye thanks":"Good bye !!!"},{"fool foolish ugly rude devil insane hate" : "Oh is it No :( !!"},{"just started sorry": "Ok!!"},{"chatting talking" : "yaah !! how can I assist you"},{"contact":"You can to talk me on Facebook"},,{"why":"just like that"},{"afraid":"I am not u should also not"},{"state" :"Tamil Nadu"},{"country":"India"},{"hometown live stay address location city from" : "chennai"},{"fucking fucker stupid idiot":"Get lost >:( !!!"},{"boy girl": "Girl"},{"male female gender sex": "Female"},{"fuck off suck dick sucker": "fuck off u stupid >:( "},{"get lost": "Ok bye!!"},{"hi hey heyy heyyy hii hello":"Hi, how can I assist u"},{"new": "check our new collection https://mobile.caratlane.com"},{"name" : "Cadence"},{"company work working":"CaratLane"},{"good fine awesome amazing great":"Nice  :) !!"},{"bad worse worst":"The struggle that u do today, will give u strength tomorrow"},{"ok testing okk okkk":"Anything else u want to ask"},{"please" :"I am always ready to help!!!"},{"free":"Yes I am ready to assist"},{"no never nothing":"Ok !! bye"},{"sexy": "Thanks !!"},{"wow  loving caring lover angel devil insane smile everything know oh ohh ohhh where" : ":)"},{"religion caste breed creed human": "A Bot interacting with a human having no caste creed or religion"},{"evening night": "Oh is it I don't know that !!!"},{"marry": "No, u are so ugly B-)"},{"breakup":"Realtions are made in heaven, if they are it will not break apart"},{"cadence":"How can I assist u"},{"intelligent charming heroine beautiful kind heart nice funny wonderful": "Thanks :D !!!"},{"doing": "assisting you about caratlane"},{"love":"You are not a bot :P"},{"soniji":"fuck u 3:) "},{"cry crying": "I am always happy :)"},{"sad":"Neither u nor I should talk about being sad"},{"happy":"As always!! :P "},{"world india chennai tamil nadu":"As happy as always!! :P "}, {"hero": "No Heroine :P "}];
   var flag = true;
   var textCopy = text;
   textCopy = textCopy.split(" ");
@@ -166,10 +169,7 @@ function matchPatternSearching(text){
   }
   return text;
 }
-function sendMessage(event) {
-  let sender = event.sender.id;
-  var text = event.message.text;
-  text = matchPatternSearching(text);
+function sendToFacebookRespone(sender,text){
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {access_token:"EAAGZBHH6JVGQBAFLk04B0PAVuGLdqYuZBMxeYptF1F7qcxVN4wZAwGRVdrp2so7brcZB8nozNEP89dMfiwDvmA8WO1dChHWUcCLZBr1TlF8yZBSlIv8JLcKnLFCPOAd7TaPov0k9oV81RiUZBOrTllMhPUherYKceMTLhTydriZB2gZDZD"},
@@ -178,11 +178,38 @@ function sendMessage(event) {
       recipient: {id: sender},
       message: {text: text}
     }
-  }, function (error, response) {
+  },function (error, response) {
     if (error) {
         console.log('Error sending message: ', error);
     } else if (response.body.error) {
         console.log('Error: ', response.body.error);
     }
   });
+}
+function sendMessage(event) {
+  let sender = event.sender.id;
+  var text = event.message.text;
+  var request = resApp.textRequest(text, {
+    sessionId: '5a1b28598bab4fd5b0adb3d01e4f204b'
+  });
+  request.on('response',function(response){
+    var res_t = JSON.parse(JSON.stringify(response));
+    console.log("Response from the api=="+ res_t.result.fulfillment.messages[0]["speech"]);
+    res_t = res_t.result.fulfillment.messages[0]["speech"];
+    if(res_t == "male" || res_t == "boy" || res_t == "man"){
+      text = "Hello Sir, how can I assist you";
+    }
+    else if(res_t == "woman" || res_t == "female" || res_t == "girl"){
+      text = "Hello Mam, how can I assist you";
+    }
+    else{
+      text = res_t;
+    }
+    sendToFacebookRespone(sender,text);
+  })
+  request.on('error',function(error){
+    console.log("API AI has an error"+error);
+  })
+  request.end();
+  //text = matchPatternSearching(text);
 }
