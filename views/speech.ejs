@@ -1,0 +1,46 @@
+<html>
+  <head>
+   <% include ../partials/header %>
+  </head>
+  <body>
+    <input type = "text"  id = "textData"></>
+    <input type = "button" value = "type anythng it read and convert to voice" onclick = "synthesizedData()"></>
+    <input type = "button" value = "click and speak your voice will converted to text" onclick = "getTheSpokenData()" />
+    <p id = "resulttext"></p>
+    <audio src= "" class = "speech" hidden></audio>
+  </body>
+  <script type  = "text/javascript">
+  function synthesizedData(){
+    var data = document.getElementById("textData").value;
+    var msg = new SpeechSynthesisUtterance(data);
+    window.speechSynthesis.speak(msg);
+  }
+  function getTheSpokenData(){
+    var r = document.getElementById("resulttext");
+    if('webkitSpeechRecognition' in window){
+      var speechRecognizer =  new webkitSpeechRecognition();
+      speechRecognizer.continuous = true;
+      speechRecognizer.interimResults = true;
+      speechRecognizer.lang = "en-IN";
+      speechRecognizer.start();
+      var finalTranscript = '';
+      speechRecognizer.onresult = function(event){
+        var interimscript = '';
+        for(var i = event.resultIndex; i < event.results.length;i++){
+          var transcript = event.results[i][0].transcript;
+          console.log("transcript==="+transcript);
+          if(event.results.IsFinal){
+            finalTranscript = transcript;
+          }else{
+            interimscript+=transcript;
+          }
+        }
+        r.innerHTML = finalTranscript+'<span color = "#999">'+interimscript+'</span>';
+      }
+    }
+    else{
+     r.innerHTML = "Your browser is not supported!!!!";
+    }
+  }
+  </script>
+</html>
