@@ -16,13 +16,13 @@ app.get("/",function(req,res){
     res.send(html);
   });
 });
-app.post("/sendRequest",function(req,res){
-  console.log("requesting ...."+req.body);
-  var query = req.body;
-  var text = sendMessage(query);
-  res.send(text);
+app.get("/sendRequest",function(req,res){
+  //console.log("requesting ...."+req.body)
+  console.log("query=="+((req.query.data)));
+  var text = sendMessage(req.query.data,res);
+  console.log("text=="+text);
 });
-function sendMessage(data) {
+function sendMessage(data,res) {
   var text = data
   var request = resApp.textRequest(text, {
     sessionId: '5a1b28598bab4fd5b0adb3d01e4f204b'
@@ -40,7 +40,7 @@ function sendMessage(data) {
     else{
       text = res_t;
     }
-    return text;
+    res.send(text);
     //sendToFacebookRespone(sender,text);
   })
   request.on('error',function(error){

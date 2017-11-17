@@ -24,11 +24,12 @@
       var text = document.getElementById("chatText").value;
       var setElem  = document.createElement("p");
       setElem.innerText = text;
+      var jsonData = {"data":text};
       document.getElementsByTagName("body")[0].appendChild(setElem); 
       $.ajax({
-        type: "POST",
+        type: "GET",
         url: "/sendRequest",
-        data: text,
+        data: jsonData,
         success:function(response){
          console.log("Listed response"+response);
          var getElem  = document.createElement("p");
