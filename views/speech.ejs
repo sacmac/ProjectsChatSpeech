@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script type  = "text/javascript">
+      (function() {
+        // Load the script
+        var script = document.createElement("script");
+        script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js';
+        script.type = 'text/javascript';
+        script.onload = function() {
+          window.$ = window.jQuery;
+        };
+        document.getElementsByTagName("head")[0].appendChild(script);
+      })();
+    </script>
+  </head>
+</script>
+  </head>
+  <body>
+    <input type = "text" id = "chatText">
+    <input type ="button" value ="sendChat" onclick = "sendData()"> 
+  </body>
+  <script type="text/javascript">
+    function sendData(){
+      var text = document.getElementById("chatText").value;
+      var setElem  = document.createElement("p");
+      setElem.innerText = text;
+      document.getElementsByTagName("body")[0].appendChild(setElem); 
+      $.ajax({
+        type: "POST",
+        url: "/sendRequest",
+        data: text,
+        success:function(response){
+         console.log("Listed response"+response);
+         var getElem  = document.createElement("p");
+         getElem.innerText = response;
+         document.getElementsByTagName("body")[0].appendChild(getElem);
+        }
+      });
+    }
+  </script>
+</html>

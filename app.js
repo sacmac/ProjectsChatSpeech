@@ -12,13 +12,18 @@ app.use(bodyParser.json());
 app.set("view engine","ejs");
 app.use(express.static('public'));
 app.get("/",function(req,res){
-  res.render("index",function(err,html){
+  res.render("speech",function(err,html){
     res.send(html);
   });
 });
-function sendMessage(event) {
-  let sender = event.sender.id;
-  var text = event.message.text;
+app.post("/sendRequest",function(req,res){
+  console.log("requesting ...."+req.body);
+  var query = req.body;
+  var text = sendMessage(query);
+  res.send(text);
+});
+function sendMessage(data) {
+  var text = data
   var request = resApp.textRequest(text, {
     sessionId: '5a1b28598bab4fd5b0adb3d01e4f204b'
   });
@@ -35,7 +40,8 @@ function sendMessage(event) {
     else{
       text = res_t;
     }
-    sendToFacebookRespone(sender,text);
+    return text;
+    //sendToFacebookRespone(sender,text);
   })
   request.on('error',function(error){
     console.log("API AI has an error"+error);
