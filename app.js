@@ -41,11 +41,9 @@ function sendMessage(data,res) {
       text = res_t;
     }
     res.send(text);
-    //sendToFacebookRespone(sender,text);
   })
   request.on('error',function(error){
     console.log("API AI has an error"+error);
   })
   request.end();
-  //text = matchPatternSearching(text);
 }
