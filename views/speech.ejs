@@ -12,31 +12,71 @@
         document.getElementsByTagName("head")[0].appendChild(script);
       })();
     </script>
+    <style>
+      .chat__bot__popup{
+        color: #434343;
+        font-size: 14px;
+        background-color: #fff;
+        margin: 0 auto;
+        padding: 0;
+        width: 98%;
+        font-weight: 300;
+        padding: 16px;
+        display: block;
+        position: fixed;
+        height: 433px;
+        left: 0;
+        bottom: 0;
+        z-index: 150;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        -webkit-box-shadow: 0px 0px 12px 0px #a1a0a0;
+        -moz-box-shadow: 0px 0px 12px 0px #a1a0a0;
+        box-shadow: 0px 0px 12px 0px #a1a0a0;
+        -webkit-transform: none;
+        -moz-transform: none;
+        -o-transform: none;
+      }
+      #chatText{
+        bottom:4px;
+        position: fixed;
+      }
+    </style>
   </head>
 </script>
   </head>
   <body>
-    <input type = "text" id = "chatText">
-    <input type ="button" value ="sendChat" onclick = "sendData()"> 
+    <div class = "chat__bot__popup">
+      <div class = "user__bot__text">
+      </div>
+      <textarea id = "chatText" onkeypress="sendData(event)" cols ="154" rows = "4"></textarea>
+    </div>
   </body>
   <script type="text/javascript">
-    function sendData(){
+    function sendData(e){
+      var code = (e.keyCode ? e.keyCode : e.which);
       var text = document.getElementById("chatText").value;
-      var setElem  = document.createElement("p");
-      setElem.innerText = text;
-      var jsonData = {"data":text};
-      document.getElementsByTagName("body")[0].appendChild(setElem); 
-      $.ajax({
-        type: "GET",
-        url: "/sendRequest",
-        data: jsonData,
-        success:function(response){
-         console.log("Listed response"+response);
-         var getElem  = document.createElement("p");
-         getElem.innerText = response;
-         document.getElementsByTagName("body")[0].appendChild(getElem);
-        }
-      });
+      console.log("code=="+code);
+      if(code == 13 ) { //Enter keycode
+        var setElem  = document.createElement("p");
+        setElem.class = "text__para__user";
+        setElem.innerText = text;
+        var jsonData = {"data":text};
+        document.getElementById("chatText").value = "";
+        document.getElementsByClassName("user__bot__text")[0].appendChild(setElem); 
+        $.ajax({
+          type: "GET",
+          url: "/sendRequest",
+          data: jsonData,
+          success:function(response){
+           console.log("Listed response"+response);
+           var getElem  = document.createElement("p");
+           getElem.class = "text__para__bot"
+           getElem.innerText = response;
+           document.getElementsByClassName("user__bot__text")[0].appendChild(getElem);
+          }
+        });
+      }
     }
   </script>
 </html>
