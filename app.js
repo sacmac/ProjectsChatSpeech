@@ -1,6 +1,6 @@
 var express = require("express");
 var apiai  = require("apiai");
-var resApp = apiai("27ce8b5cb67c4dbb80cdd6d59e1562cd");
+var resApp = apiai("xxxxxXXXXXX");
 var bodyParser = require("body-parser");
 const request = require('request');
 https = require('https');
@@ -25,7 +25,7 @@ app.get("/sendRequest",function(req,res){
 function sendMessage(data,res) {
   var text = data
   var request = resApp.textRequest(text, {
-    sessionId: '5a1b28598bab4fd5b0adb3d01e4f204b'
+    sessionId: 'XXXXXXXXXXXXX04b'
   });
   request.on('response',function(response){
     var res_t = JSON.parse(JSON.stringify(response));
