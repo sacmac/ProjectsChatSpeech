@@ -24,18 +24,21 @@
       speechRecognizer.lang = "en-IN";
       speechRecognizer.start();
       var finalTranscript = '';
+      var searchScript = '';
       speechRecognizer.onresult = function(event){
         var interimscript = '';
+        window.eventData = event;
         for(var i = event.resultIndex; i < event.results.length;i++){
-          var transcript = event.results[i][0].transcript;
+          window.transcript = event.results[i][0].transcript;
           console.log("transcript==="+transcript);
-          if(event.results.IsFinal){
-            finalTranscript = transcript;
-          }else{
-            interimscript+=transcript;
-          }
+          console.log(event.results[0].isFinal); 
         }
-        r.innerHTML = finalTranscript+'<span color = "#999">'+interimscript+'</span>';
+        if(transcript.toLowerCase().indexOf("sir") == -1 && transcript.toLowerCase().indexOf("search") == -1){
+           r.innerHTML = transcript;
+           searchScript = transcript;
+        }else{
+          window.location.href = "https://mobile.caratlane.com?query="+searchScript;
+        }
       }
     }
     else{
